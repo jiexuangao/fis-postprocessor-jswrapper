@@ -5,7 +5,7 @@
 
 'use strict';
 module.exports = function (content, file, conf) {
-    var options = file.jswrapper;
+    var options = file.jswrapperwithdeps;
 
     if (file.isMod || conf.wrapAll || options) {
 
@@ -13,7 +13,7 @@ module.exports = function (content, file, conf) {
         var type = getConfig('type', options, conf);
 
         //扩展template能力，支持function
-        if(typeof template==='function'){
+        if(typeof template === 'function'){
             var temp = template(file);
             if(temp){
                 template = temp;
@@ -21,13 +21,23 @@ module.exports = function (content, file, conf) {
         }
         // wrap
         if (template) {
+            var deps = file.requires.concat([]);
+
+            if (deps.length > 0) {
+                deps = '[\'require\', \'exports\', \'module\',\'' + deps.join('\',\'') + '\']';
+            } else {
+                deps = '[\'require\', \'exports\', \'module\']';
+            }
+
             content = String(template)
                 .split('${content}').join(content)
-                .split('${id}').join(file.getId());
+                .split('${id}').join(file.getId())
+                .split('${deps}').join(deps);
+
                 //增加md5
         } else if (type === 'amd') {
             if (!/^\s*define\s*\(/.test(content)) {
-                content = 'define(\'' + file.getId() + '\', function(require, exports, module){ ' + content +
+                content = 'define(\'' + file.getId()+ '\', ' + deps + ', function(require, exports, module){ ' + content +
                     ' \r\n});';
             }
         } else {
