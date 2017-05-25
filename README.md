@@ -1,4 +1,4 @@
-# fis-postprocessor-jswrapper
+# fis-postprocessor-jswrapperwithdeps
 
 A postprocessor plugin for fis to wrap javascript with closure or amd define.
 
@@ -12,7 +12,7 @@ A postprocessor plugin for fis to wrap javascript with closure or amd define.
 fis.config.merge({
     settings : {
         postprocessor : {
-            jswrapper : {
+            jswrapperwithdeps : {
                 //wrap type. if omitted, it will wrap js file with '(function(){...})();'.
                 type : 'amd',
                 //you can use template also, ${content} means the file content
@@ -31,7 +31,7 @@ fis.config.merge({
 fis.config.set('roadmap.path', [
     {
         reg: '/page/**.js',
-        jswrapper: {
+        jswrapperwithdeps: {
             //wrap type. if omitted, it will wrap js file with '(function(){...})();'.
             type : 'amd',
 
